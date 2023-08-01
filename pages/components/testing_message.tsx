@@ -1,7 +1,10 @@
+import DateItem from "./date_item";
+
 const TestingMessage = () => {
   return (
     <>
-      <li className={`flex justify-start`}>
+      <DateItem date={new Date()}></DateItem>
+      <li className={`flex justify-start gap`}>
         <div className=" bg-graymsg sm:max-w-[75%] flex items-end gap-2 rounded-md py-1 px-2">
           <div>
             <h4 className=" text-lightgreen">User</h4>

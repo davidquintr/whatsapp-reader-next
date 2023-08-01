@@ -47,7 +47,7 @@ const MessageItem = ({element, index, povUser, colorUser } : MessageItemProps) =
               {element?.username}
             </h4>
           )}
-          <p className=" text-white text-sm break-all">{element?.message}</p>
+          <p className=" text-white text-sm break-all" dangerouslySetInnerHTML={{ __html: element?.message }}></p>
         </div>
         { isValid(element?.date) ? <p className=" text-white/50 text-xs">{`${element?.date
           ?.getHours()

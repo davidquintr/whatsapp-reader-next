@@ -6,6 +6,14 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontSize: {
+      xs: 'x-small',
+      sm: 'small',
+      md: 'medium',
+      lg: 'large',
+      xl: 'x-large',
+      xxl: 'xx-large'
+    },
     screens: {
       'sm': {'min': '0px', 'max': '767px'},
       'md': {'min': '768px', 'max': '1023px'},

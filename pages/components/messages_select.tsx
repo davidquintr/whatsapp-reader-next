@@ -35,26 +35,14 @@ const FileSelect = () => {
   let [usersMessage, setUserMessages] = useState<string[]>([]);
   let [usersColors, setUserColor] = useState<string[]>([]);
   let actualDate = null;
-
   let selectUserPov = useRef<HTMLSelectElement>(null);
-  let lastUser = ""
+  let [messageLoad, setMessageLoad] = useState(0)
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const newUserColor = getRandomColor();
     setUserColor((prevColors) => [...prevColors, newUserColor]);
   }, [usersMessage]);
-
-  useEffect(() => {
-    console.log(allMessages);
-  }, [allMessages]);
-
-  useEffect(() => {
-    console.log(povUser);
-  }, [povUser]);
-
-  useEffect(() => {
-    console.log(usersColors);
-  }, [usersColors]);
 
   const handleDragEnter = (e: any) => {
     e.preventDefault();
@@ -88,6 +76,17 @@ const FileSelect = () => {
 
     const file = e.dataTransfer.files[0];
 
+    openFile(file)
+
+  };
+
+  const handleFileSelect = (event) => {
+    const selectedFile = event.target.files[0];
+    openFile(selectedFile)
+
+  };
+
+  function openFile(file){
     if (file != null) {
       if (file.type.startsWith("text/")) {
         const reader = new FileReader();
@@ -96,8 +95,8 @@ const FileSelect = () => {
           const fileContent = reader.result;
           const lines = (fileContent as string)?.split("\n");
 
-          const newMessages = lines.map((element: string) =>
-            setFormatedLines(element)
+          const newMessages = lines.map((element: string, index) =>
+            setFormatedLines(element, index)
           );
           setAllMessages((prevMessages) => [...prevMessages, ...newMessages]);
           setDropStatus(true);
@@ -108,9 +107,10 @@ const FileSelect = () => {
         console.log("Error: Only text files are supported.");
       }
     }
-  };
+  }
 
-  function setFormatedLines(messageLine: string) {
+  function setFormatedLines(messageLine: string, index : number) {
+    setMessageLoad(index)
     const [dateTimePart, usernameAndMessage] = messageLine.split(" - ");
     let [datePart, timePart, meridem] = dateTimePart.split(" ");
     let defaultMessage = false;
@@ -124,9 +124,7 @@ const FileSelect = () => {
     
     } else {
       const lastDashIndex = usernameAndMessage?.lastIndexOf("-");
-      console.log(date.toString())
        if(!isValid(date)) {
-        console.log(messageLine)
         message = messageLine;
         defaultMessage = false
       } else if (lastDashIndex !== -1) {
@@ -185,12 +183,19 @@ const FileSelect = () => {
     <>
       {dropStatus == false ? (
         <section
-          className="flex min-h-[128px] py-8 items-center flex-col justify-center border-[6px] bg-greenmsh/25 hover:bg-greenmsh/60 grow-0 border-dashed border-greenmsh rounded-xl text-brightgreen gap-2"
+          className="flex min-h-[128px] py-8 transition-all active:scale-[0.98] items-center flex-col justify-center border-[6px] bg-greenmsh/25 hover:bg-greenmsh/60 grow-0 border-dashed border-greenmsh rounded-xl text-brightgreen gap-2"
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
+          onClick={() => fileInputRef.current.click()}
         >
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleFileSelect}
+        />
           <FaUpload className="h-10 w-auto" />
           <p ref={textDrop}>Drag or Upload a file.</p>
         </section>
@@ -226,19 +231,18 @@ const FileSelect = () => {
                 ></UserItem>
               ))}
             </ul>
+            <p className=" text-brightgreen font-semibold">
+              Loaded {messageLoad} messages
+            </p>
           </section>
         </>
       )}
       
       <ul className="bg-darkgreen flex flex-col rounded-md p-3 gap-1 overflow-hidden">
         {allMessages.length < 1 ? (
-          <section className="my-4">
             <TestingMessage></TestingMessage>
-          </section>
         ) : (
           allMessages.map((element: Message, index) => {
-          
-            
             return (
               <React.Fragment key={index}>
                 {mayShowActualDate(element.date) ? <DateItem date={element.date}></DateItem> : null}
