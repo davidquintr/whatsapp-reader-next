@@ -32,27 +32,27 @@ const MessageItem = ({element, index, povUser, colorUser } : MessageItemProps) =
     <>
     {element?.message != "" ? (<li
       className={`flex ${
-        povUser == element.username ? "justify-end" : "justify-start"
+        povUser == element?.username ? "justify-end" : "justify-start"
       }`}
       key={index}
     >
       <div
         className={`${
-          povUser == element.username ? "bg-greenmsh" : "bg-graymsg"
+          povUser == element?.username ? "bg-greenmsh" : "bg-graymsg"
         } flex sm:max-w-[75%] md:max-w-[75%] max-w-[50%] items-end gap-2 rounded-md py-1 px-2`}
       >
         <div>
-          {povUser == element.username ? null : (
+          {povUser == element?.username ? null : (
             <h4 style={{ color: colorUser}}>
               {element?.username}
             </h4>
           )}
           <p className=" text-white text-sm break-all">{element?.message}</p>
         </div>
-        { isValid(element?.date) ? <p className=" text-white/50 text-xs">{`${element.date
+        { isValid(element?.date) ? <p className=" text-white/50 text-xs">{`${element?.date
           ?.getHours()
           .toString()
-          .padStart(2, "0")}:${element.date
+          .padStart(2, "0")}:${element?.date
           ?.getMinutes()
           .toString()
           .padStart(2, "0")}`}</p> : null}
