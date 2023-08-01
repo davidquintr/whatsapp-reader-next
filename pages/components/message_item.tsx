@@ -39,17 +39,17 @@ const MessageItem = ({element, index, povUser, colorUser } : MessageItemProps) =
       <div
         className={`${
           povUser == element?.username ? "bg-greenmsh" : "bg-graymsg"
-        } flex sm:max-w-[75%] md:max-w-[75%] max-w-[50%] items-end gap-2 rounded-md py-1 px-2`}
+        } flex flex-wrap sm:max-w-[75%] md:max-w-[75%] max-w-[50%] items-end rounded-md py-1 px-2`}
       >
         <div>
           {povUser == element?.username ? null : (
-            <h4 style={{ color: colorUser}}>
+            <h4 className="text-lightgreen" style={{ color: colorUser}}>
               {element?.username}
             </h4>
           )}
-          <p className=" text-white text-sm break-all" dangerouslySetInnerHTML={{ __html: element?.message }}></p>
+          <p className=" text-white text-sm break-words">{element?.message }</p>
         </div>
-        { isValid(element?.date) ? <p className=" text-white/50 text-xs">{`${element?.date
+        { isValid(element?.date) ? <p className=" text-white/50 pl-2 flex-1 text-right text-xs">{`${element?.date
           ?.getHours()
           .toString()
           .padStart(2, "0")}:${element?.date

@@ -8,7 +8,7 @@ export default function Document() {
       <Head />
       <body className='bg-darkbg min-h-screen relative flex flex-col'>
         <Main />
-        <footer className='flex flex-col justify-center items-center text-brightgreen bg-darkgreen p-[10px] gap-[8px] relative mt-auto'>
+        <footer className='flex flex-col justify-center items-center text-brightgreen bg-darkgreen p-[10px] text-center gap-[8px] relative mt-auto'>
           <p>©2023 Designed and Programmed by David Quintanilla</p>
           <Link href={"https://github.com/davidquintr/whatsapp-reader-next"} target='_blank' className=' bg-greenmsh p-1 hover:bg-greenmsh/40 transition-all active:scale-[0.98] rounded-md text-white flex text-sm gap-[5px] items-center hover:'>
             <FaGithub></FaGithub>
