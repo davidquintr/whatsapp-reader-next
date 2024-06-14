@@ -1,3 +1,4 @@
+"use client"
 interface DateItemProps {
   date: Date;
 }
