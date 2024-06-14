@@ -43,7 +43,7 @@ const FileSelect = () => {
   useEffect(() => {
     const newUserColor = getRandomColor();
     setUserColor((prevColors) => [...prevColors, newUserColor]);
-  }, [usersMessage]);
+  }, [usersMessage, usersColors]);
 
   const handleDragEnter = (e: any) => {
     e.preventDefault();

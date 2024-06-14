@@ -39,11 +39,11 @@ const MessageItem = ({element, index, povUser, colorUser } : MessageItemProps) =
       <div
         className={`${
           povUser == element?.username ? "dark:bg-dark-green-300 bg-light-green-100" : "dark:bg-dark-gray-200 bg-white"
-        } flex flex-wrap max-w-[75%] items-end rounded-md py-1 px-2  shadow-md`}
+        } flex flex-wrap max-w-[75%] items-end rounded-md py-2 px-2  shadow-md`}
       >
         <div className="flex flex-col max-w-full">
           {povUser == element?.username ? null : (
-            <h4 className="text-dark-green-100" style={{ color: colorUser}}>
+            <h4 className="dark:text-dark-green-100 text-light-green-300 leading-none font-medium" style={{ color: colorUser}}>
               {element?.username}
             </h4>
           )}
