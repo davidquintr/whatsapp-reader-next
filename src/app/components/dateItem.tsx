@@ -1,9 +1,18 @@
 "use client"
+
+import { useState, useEffect } from 'react';
+
 interface DateItemProps {
   date: Date;
 }
 
 const DateItem = ({ date }: DateItemProps) => {
+  const [tdate, setDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setDate(tdate);
+  }, [tdate]);
+
   return (
     <>
       <li className="flex text-center items-center justify-center">
