@@ -1,12 +1,13 @@
+"use client"
 import { FaUpload } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
-import { format, addDays, parse, isValid } from "date-fns";
-import MessageItem from "./message_item";
-import DefaultAlert from "./default_alert";
-import TestingMessage from "./testing_message";
-import UserItem from "./user_item";
+import { parse, isValid } from "date-fns";
+import MessageItem from "./messageItem";
+import DefaultAlert from "./defaultAlert";
+import TestingMessage from "./testingMessage";
+import UserItem from "./userItem";
 import React from "react";
-import DateItem from "./date_item";
+import DateItem from "./dateItem";
 
 class Message {
   defaultMessage: boolean;
@@ -34,10 +35,10 @@ const FileSelect = () => {
   let [allMessages, setAllMessages] = useState<Message[]>([]);
   let [usersMessage, setUserMessages] = useState<string[]>([]);
   let [usersColors, setUserColor] = useState<string[]>([]);
-  let actualDate = null;
+  let actualDate: Date | null = null;
   let selectUserPov = useRef<HTMLSelectElement>(null);
   let [messageLoad, setMessageLoad] = useState(0)
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const newUserColor = getRandomColor();
@@ -47,12 +48,22 @@ const FileSelect = () => {
   const handleDragEnter = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    !dropStatus ? (textDrop.current.innerText = "Drop the file.") : null;
+
+    if (!textDrop || !textDrop.current) return;
+
+    if (!dropStatus) {
+      textDrop.current.innerText = "Drop the file.";
+    }
+  
   };
 
   const handleDragLeave = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!textDrop || !textDrop.current) return;
+
+
     textDrop.current.innerText = "Drag or Upload a file.";
   };
 
@@ -66,12 +77,18 @@ const FileSelect = () => {
   const handleDragOver = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!textDrop || !textDrop.current) return;
+
     !dropStatus ? (textDrop.current.innerText = "Drop the file.") : null;
   };
 
   const handleDrop = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!textDrop || !textDrop.current) return;
+
     textDrop.current.innerText = "Drag or Upload a file.";
 
     const file = e.dataTransfer.files[0];
@@ -80,13 +97,16 @@ const FileSelect = () => {
 
   };
 
-  const handleFileSelect = (event) => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    if(!event.target.files) return;
+
     const selectedFile = event.target.files[0];
     openFile(selectedFile)
 
   };
 
-  function openFile(file){
+  function openFile(file: Blob | null){
     if (file != null) {
       if (file.type.startsWith("text/")) {
         const reader = new FileReader();
@@ -182,44 +202,47 @@ const FileSelect = () => {
   return (
     <>
       {dropStatus == false ? (
-        <section
-          className="flex min-h-[128px] py-8 transition-all active:scale-[0.98] items-center flex-col justify-center border-[6px] bg-greenmsh/25 hover:bg-greenmsh/60 grow-0 border-dashed border-greenmsh rounded-xl text-brightgreen gap-2"
+        <button
+          className="flex min-h-[128px] py-8 transition-all active:scale-[0.98] items-center flex-col justify-center border-[6px] bg-light-green-200/70 hover:bg-light-green-200 border-light-green-300 text-white dark:bg-dark-green-300/25 hover:bg-dark-green-300/60 grow-0 border-dashed dark:border-dark-green-300 rounded-xl dark:text-dark-green-200 gap-2"
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          onClick={() => fileInputRef.current.click()}
-        >
+          onClick={() => {
+            if (fileInputRef.current) {
+              fileInputRef.current.click();
+            }
+          }}        >
         <input
+          className="hidden"
           type="file"
           ref={fileInputRef}
-          style={{ display: 'none' }}
           onChange={handleFileSelect}
         />
           <FaUpload className="h-10 w-auto" />
           <p ref={textDrop}>Drag or Upload a file.</p>
-        </section>
+        </button>
       ) : (
         <>
-          <section className="bg-greenmsh/25 py-2 rounded-xl flex gap-2 flex-col justify-center items-center">
-            <p className=" text-brightgreen font-semibold">Control panel</p>
+          <section className="dark:text-dark-green-200 text-white bg-light-green-300 dark:bg-dark-green-300/25 py-2 rounded-xl flex gap-2 flex-col justify-center items-center">
+            <p className=" font-semibold">Control panel</p>
             <select
               ref={selectUserPov}
               onChange={handleChangeSelect}
-              className="w-32 rounded-md bg-brightgreen px-2"
+              className="w-32 rounded-md dark:text-white bg-dark-green-200 px-2"
               name="selectedPov"
             >
               {usersMessage.map((element, index) => (
                 <option
                   key={index}
-                  defaultChecked={element == povUser}
                   value={element}
+                  selected={element == povUser}
                 >
                   {element}
                 </option>
               ))}
             </select>
-            <p className=" text-brightgreen font-semibold">
+            <p className="font-semibold">
               Users in the conversation
             </p>
             <ul className="flex justify-center items-center w-full gap-2 flex-wrap">
@@ -231,14 +254,14 @@ const FileSelect = () => {
                 ></UserItem>
               ))}
             </ul>
-            <p className=" text-brightgreen font-semibold">
+            <p className="font-semibold">
               Loaded {messageLoad} messages
             </p>
           </section>
         </>
       )}
       
-      <ul className="bg-darkgreen flex flex-col rounded-md p-3 gap-1 overflow-hidden">
+      <ul className="bg-[url('/img/background-light.png')] dark:bg-[url('/img/background-dark.png')] bg-half flex flex-col rounded-md p-3 gap-1 overflow-hidden">
         {allMessages.length < 1 ? (
             <TestingMessage></TestingMessage>
         ) : (
