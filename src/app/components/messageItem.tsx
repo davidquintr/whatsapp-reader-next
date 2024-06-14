@@ -38,18 +38,18 @@ const MessageItem = ({element, index, povUser, colorUser } : MessageItemProps) =
     >
       <div
         className={`${
-          povUser == element?.username ? "bg-greenmsh" : "bg-graymsg"
-        } flex flex-wrap sm:max-w-[75%] md:max-w-[75%] max-w-[50%] items-end rounded-md py-1 px-2`}
+          povUser == element?.username ? "dark:bg-dark-green-300 bg-light-green-100" : "dark:bg-dark-gray-200 bg-white"
+        } flex flex-wrap max-w-[75%] items-end rounded-md py-1 px-2  shadow-md`}
       >
-        <div>
+        <div className="flex flex-col max-w-full">
           {povUser == element?.username ? null : (
-            <h4 className="text-lightgreen" style={{ color: colorUser}}>
+            <h4 className="text-dark-green-100" style={{ color: colorUser}}>
               {element?.username}
             </h4>
           )}
-          <p className=" text-white text-sm break-words">{element?.message }</p>
+          <p className=" dark:text-white text-sm break-all">{element?.message }</p>
         </div>
-        { isValid(element?.date) ? <p className=" text-white/50 pl-2 flex-1 text-right text-xs">{`${element?.date
+        { isValid(element?.date) ? <p className=" dark:text-white/50 text-black/50 pl-2 flex-1 text-right text-xs">{`${element?.date
           ?.getHours()
           .toString()
           .padStart(2, "0")}:${element?.date
